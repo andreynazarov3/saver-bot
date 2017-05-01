@@ -1,7 +1,7 @@
 const Telegraf = require('telegraf')
 const app = new Telegraf(process.env.BOT_TOKEN)
 const admin = require("firebase-admin");
-const serviceAccount = require("/saver-bot-firebase-adminsdk-8hra6-a7ca5b3db6.json");
+const serviceAccount = require("./saver-bot-firebase-adminsdk-8hra6-a7ca5b3db6.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://saver-bot.firebaseio.com"
