@@ -29,8 +29,9 @@ app.on('text', (ctx) => {
     console.log(ctx)
     ctx.reply('saving this text...')
         .then((ctx) => {
-            users.child(ctx.from.id).push({
-                text: ctx.message.text
+            users.child(ctx.message.from.id).push({
+                text: ctx.message.text,
+                data: ctx.message.date
             })
         })
 })
