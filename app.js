@@ -34,6 +34,9 @@ app.on('text', (ctx) => {
                 data: ctx.message.date
             })
         })
+        .then((ctx) => {
+            ctx.reply('saved!')
+        })
 })
 
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
