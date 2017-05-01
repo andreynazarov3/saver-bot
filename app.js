@@ -1,9 +1,17 @@
 const http = require('http')
+const port = 80
 
-const server = http.createServer(function(request, response) {
-    response.writeHead(200, {"Content-Type": "text/html"});
-    response.write("Hello, heroku!");
-});
+const requestHandler = (request, response) => {
+    console.log(request.url)
+    response.end('Hello Node.js Server!')
+}
 
-server.listen(80);
-console.log("Server is listening");
+const server = http.createServer(requestHandler)
+
+server.listen(port, (err) => {
+    if (err) {
+        return console.log('something bad happened', err)
+    }
+
+    console.log(`server is listening on ${port}`)
+})
