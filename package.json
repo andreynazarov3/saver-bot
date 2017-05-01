@@ -1,0 +1,23 @@
+{
+  "name": "saver-bot",
+  "version": "1.0.0",
+  "description": "bot saving everything",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreynazarov3/saver-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "telegram"
+  ],
+  "author": "Andrey Nazarov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andreynazarov3/saver-bot/issues"
+  },
+  "homepage": "https://github.com/andreynazarov3/saver-bot#readme"
+}
