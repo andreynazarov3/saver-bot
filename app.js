@@ -28,15 +28,17 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
 app.on('text', (ctx) => {
     console.log(ctx)
     ctx.reply('saving this text...')
-        .then((ctx) => {
-            users.child(ctx.update.message.from.id).push({
-                text: ctx.update.message.text,
-                data: ctx.update.message.date
-            })
-        })
-        .then((ctx) => {
-            ctx.reply('saved!')
-        })
+    users.child(ctx.message.from.id).push({
+        text: ctx.message.text,
+        data: ctx.message.date
+    })
+})
+    .then((ctx) => {
+        ctx.reply('saved!')
+    })
+    .catch((ctx) => {
+        ctx.reply('ooops, something went wrong ;(')
+    })
 })
 
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
