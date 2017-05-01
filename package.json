@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/andreynazarov3/saver-bot/issues"
   },
-  "homepage": "https://github.com/andreynazarov3/saver-bot#readme"
+  "homepage": "https://github.com/andreynazarov3/saver-bot#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
 }
