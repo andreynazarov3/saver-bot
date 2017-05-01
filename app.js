@@ -26,7 +26,6 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
     })
 
 app.on('message', (ctx) => {
-    console.log(ctx)
     if (ctx.updateSubType === "text") {
         ctx.reply('saving this text...')
         users.child(ctx.message.from.id).push({
@@ -39,6 +38,9 @@ app.on('message', (ctx) => {
             .catch((err) => {
                 ctx.reply('ooops, something went wrong ;(')
             })
+    }
+    else if (ctx.updateSubType === "photo") {
+        console.log(ctx.message.photo)
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
     }
