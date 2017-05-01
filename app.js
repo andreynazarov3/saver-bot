@@ -32,7 +32,6 @@ app.on('text', (ctx) => {
         text: ctx.message.text,
         data: ctx.message.date
     })
-})
     .then((ctx) => {
         ctx.reply('saved!')
     })
