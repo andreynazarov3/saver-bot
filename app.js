@@ -16,5 +16,5 @@ app.on('message', (ctx) => {
     ctx.reply('i listen to you!')
 })
 
-app.startWebhook(process.env.WEBHOOK_URL, null, process.env.PORT || 5000)
+app.startWebhook("/", null, process.env.PORT || 5000)
 
