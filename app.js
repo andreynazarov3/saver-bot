@@ -1,10 +1,15 @@
-const express = require('express');
-const app = express();
+const Telegraf = require('telegraf')
+const app = new Telegraf(process.env.BOT_TOKEN)
 
-app.get('/', function (req, res) {
-    res.send('Hello Github && Heroku!');
-});
+// Set telegram webhook
+app.telegram.setWebhook(process.env.WEBHOOK_URL).then(function (result) {
+    console.log('set webhook success: ' + result)
+})
+    .catch(function (err) {
+        console.log('set webhook error: ' + err)
+    })
+app.startWebhook(process.env.WEBHOOK_URL, null, process.env.port || 5000)
 
-app.listen(process.env.PORT || 5000, function () {
-    console.log('Example app listening on port 5000!');
-});
+app.on('message', (ctx) => {
+    ctx.reply('i listen to you!')
+})
