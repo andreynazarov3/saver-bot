@@ -32,10 +32,10 @@ app.on('text', (ctx) => {
         text: ctx.message.text,
         data: ctx.message.date
     })
-    .then((ctx) => {
+    .then(() => {
         ctx.reply('saved!')
     })
-    .catch((ctx) => {
+    .catch((err) => {
         ctx.reply('ooops, something went wrong ;(')
     })
 })
