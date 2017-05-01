@@ -24,11 +24,9 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
         console.log('set webhook error: ' + err)
     })
 
-app.on('message', (ctx) => {
-    console.log(
-        'recieved message'
-    )
-    ctx.reply('i listen to you!')
+app.on('text', (ctx) => {
+    console.log(ctx.from)
+    ctx.reply('saving this text...')
 })
 
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
