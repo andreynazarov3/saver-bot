@@ -5,6 +5,6 @@ app.get('/', function (req, res) {
     res.send('Hello Heroku!');
 });
 
-app.listen(5000, function () {
-    console.log('Example app listening on port 3000!');
+app.listen(process.env.PORT || 5000, function () {
+    console.log('Example app listening on port 5000!');
 });
