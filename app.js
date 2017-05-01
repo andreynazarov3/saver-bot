@@ -13,6 +13,7 @@ admin.initializeApp({
 
 const db = admin.database();
 const ref = db.ref("/");
+
 ref.on("value", function(snapshot) {
     console.log(snapshot.val());
 });
