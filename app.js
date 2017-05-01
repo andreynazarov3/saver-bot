@@ -25,19 +25,24 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
         console.log('set webhook error: ' + err)
     })
 
-app.on('text', (ctx) => {
+app.on('message', (ctx) => {
     console.log(ctx)
-    ctx.reply('saving this text...')
-    users.child(ctx.message.from.id).push({
-        text: ctx.message.text,
-        data: ctx.message.date
-    })
-    .then(() => {
-        ctx.reply('saved!')
-    })
-    .catch((err) => {
-        ctx.reply('ooops, something went wrong ;(')
-    })
+    if (ctx.message.text !== undefined) {
+        ctx.reply('saving this text...')
+        users.child(ctx.message.from.id).push({
+            text: ctx.message.text,
+            data: ctx.message.date
+        })
+            .then(() => {
+                ctx.reply('saved!')
+            })
+            .catch((err) => {
+                ctx.reply('ooops, something went wrong ;(')
+            })
+    } else {
+        ctx.reply("sorry, i'm saving only text right now :(")
+    }
+
 })
 
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
