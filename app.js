@@ -6,7 +6,11 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://saver-bot.firebaseio.com"
 })
+const FetchStream = require("fetch").FetchStream
+const fs = require("fs")
 
+out = fs.createWriteStream('file.html');
+new FetchStream("http://www.example.com/index.php").pipe(out);
 const db = admin.database()
 const posts = db.ref("/posts")
 const users = db.ref("/users")
@@ -56,14 +60,20 @@ app.on('message', (ctx) => {
             .then((link) => {
                 console.log(link)
                 ctx.reply('saving photo...')
-                // Upload a local file to a new file to be created in your bucket.
-                bucket.upload(link, function(err, file) {
-                    if (!err) {
-                        console.log('file uploaded')
-                        ctx.reply('photo saved!')
-                    } else {
-                        console.log(err)
-                    }
+                let file = fs.createWriteStream('/files/' + file_id);
+                let fetch = new FetchStream(link).pipe(file);
+                fetch.on("end", function(){
+                    console.log('saved to disk');
+                    // Upload a local file to a new file to be created in your bucket.
+                    bucket.upload(file, function(err, file) {
+                        if (!err) {
+                            console.log('saved to google cloud')
+                            fs.unlinkSync(file);
+                        } else {
+                            console.log(err)
+                            fs.unlinkSync(file);
+                        }
+                    });
                 });
             })
     } else {
