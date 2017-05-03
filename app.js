@@ -54,14 +54,15 @@ app.on('message', (ctx) => {
         console.log(file_id)
         app.telegram.getFileLink(file_id)
             .then((link) => {
+                console.log(link)
                 ctx.reply('saving photo...')
-                // Upload a local file to a new file to be created in your bucket.
-                bucket.upload(link, function(err, file) {
-                    if (!err) {
-                        console.log('file uploaded')
-                        ctx.reply('photo saved!')
-                    }
-                });
+                // // Upload a local file to a new file to be created in your bucket.
+                // bucket.upload(link, function(err, file) {
+                //     if (!err) {
+                //         console.log('file uploaded')
+                //         ctx.reply('photo saved!')
+                //     }
+                // });
             })
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
