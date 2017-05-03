@@ -24,6 +24,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "firebase-admin": "^4.2.1",
+    "google-cloud": "^0.53.0",
     "telegraf": "^3.6.7"
   }
 }

@@ -11,6 +11,15 @@ const db = admin.database()
 const posts = db.ref("/posts")
 const users = db.ref("/users")
 
+const gcloud = require('google-cloud');
+
+const storage = gcloud.storage({
+    projectId: 'saver-bot',
+    keyFilename: serviceAccount
+});
+
+const bucket = storage.bucket('saver-bot.appspot.com');
+
 posts.on("value", function (snapshot) {
     console.log(snapshot.val())
 })
@@ -44,7 +53,14 @@ app.on('message', (ctx) => {
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
     }
-
 })
-
+app.on('photo', (ctx) => {
+    console.log(ctx.message)
+    console.log('uploading photo')
+    // bucket.upload('/photos/zoo/zebra.jpg', function(err, file) {
+    //     if (!err) {
+    //         // "zebra.jpg" is now in your bucket.
+    //     }
+    // });
+})
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
