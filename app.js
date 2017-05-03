@@ -52,7 +52,7 @@ app.on('message', (ctx) => {
         let lastPhoto = ctx.message.photo.length
         let file_id = ctx.message.photo[lastPhoto - 1].file_id
         console.log(file_id)
-        ctx.getFileLink(file_id)
+        app.telegram.getFileLink(file_id)
             .then((link) => {
                 ctx.reply('saving photo...')
                 // Upload a local file to a new file to be created in your bucket.
