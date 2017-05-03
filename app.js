@@ -56,13 +56,15 @@ app.on('message', (ctx) => {
             .then((link) => {
                 console.log(link)
                 ctx.reply('saving photo...')
-                // // Upload a local file to a new file to be created in your bucket.
-                // bucket.upload(link, function(err, file) {
-                //     if (!err) {
-                //         console.log('file uploaded')
-                //         ctx.reply('photo saved!')
-                //     }
-                // });
+                // Upload a local file to a new file to be created in your bucket.
+                bucket.upload(link, function(err, file) {
+                    if (!err) {
+                        console.log('file uploaded')
+                        ctx.reply('photo saved!')
+                    } else {
+                        console.log(err)
+                    }
+                });
             })
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
