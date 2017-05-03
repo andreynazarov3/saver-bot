@@ -61,20 +61,22 @@ app.on('message', (ctx) => {
                 console.log(link)
                 ctx.reply('saving photo...')
                 let file = fs.createWriteStream('/files/' + file_id);
-                let fetch = new FetchStream(link).pipe(file);
-                fetch.on("end", function(){
-                    console.log('saved to disk');
-                    // Upload a local file to a new file to be created in your bucket.
-                    bucket.upload(file, function(err, file) {
-                        if (!err) {
-                            console.log('saved to google cloud')
-                            fs.unlinkSync(file);
-                        } else {
-                            console.log(err)
-                            fs.unlinkSync(file);
-                        }
+                file.on('open', function() {
+                    let fetch = new FetchStream(link).pipe(file);
+                    fetch.on("end", function(){
+                        console.log('saved to disk');
+                        // Upload a local file to a new file to be created in your bucket.
+                        bucket.upload(file, function(err, file) {
+                            if (!err) {
+                                console.log('saved to google cloud')
+                                fs.unlinkSync(file);
+                            } else {
+                                console.log(err)
+                                fs.unlinkSync(file);
+                            }
+                        });
                     });
-                });
+                })
             })
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
