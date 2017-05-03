@@ -50,7 +50,7 @@ app.on('message', (ctx) => {
     }
     else if (ctx.updateSubType === "photo") {
         let lastPhoto = ctx.message.photo.length
-        let file_id = ctx.message.photo[lastPhoto].file_id
+        let file_id = ctx.message.photo[lastPhoto - 1].file_id
         console.log(file_id)
         ctx.getFileLink(file_id)
             .then((link) => {
