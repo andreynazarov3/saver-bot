@@ -49,18 +49,22 @@ app.on('message', (ctx) => {
             })
     }
     else if (ctx.updateSubType === "photo") {
-        console.log(ctx.message.photo)
+        let lastPhoto = ctx.message.photo.length
+        let file_id = ctx.message.photo[lastPhoto].file_id
+        console.log(file_id)
+        ctx.getFileLink(file_id)
+            .then((link) => {
+                ctx.reply('saving photo...')
+                // Upload a local file to a new file to be created in your bucket.
+                bucket.upload(link, function(err, file) {
+                    if (!err) {
+                        console.log('file uploaded')
+                        ctx.reply('photo saved!')
+                    }
+                });
+            })
     } else {
         ctx.reply("sorry, i'm saving only text right now :(")
     }
-})
-app.on('photo', (ctx) => {
-    console.log(ctx.message)
-    console.log('uploading photo')
-    // bucket.upload('/photos/zoo/zebra.jpg', function(err, file) {
-    //     if (!err) {
-    //         // "zebra.jpg" is now in your bucket.
-    //     }
-    // });
 })
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
