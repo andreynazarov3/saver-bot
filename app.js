@@ -56,9 +56,8 @@ app.on('message', (ctx) => {
                 let fileName = file_id + ".jpg";
                 let file = fs.createWriteStream(fileName);
                 let request = https.get(link, function (response) {
-                    return response.pipe(file)
+                    response.pipe(file)
                 })
-                    .then(() => {})
                 file.on('finish', () => {
                     console.error('All writes are now complete.');
                     // Upload a local file to a new file to be created in your bucket.
