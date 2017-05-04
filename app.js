@@ -37,12 +37,20 @@ app.on('message', (ctx) => {
             text: ctx.message.text,
             createdAt: ctx.message.date
         })
-            .then(() => {
-                return ctx.reply('saved!')
+        .then(() => {
+            return posts.push({
+                user_id: ctx.message.from.id,
+                type: 'text',
+                text: ctx.message.text,
+                createdAt: ctx.message.date
             })
-            .catch((err) => {
-                return ctx.reply('ooops, something went wrong ;(')
-            })
+        })
+        .then(() => {
+            return ctx.reply('saved!')
+        })
+        .catch((err) => {
+            return ctx.reply('ooops, something went wrong ;(')
+        })
     }
     else if (ctx.updateSubType === "photo") {
         let lastPhoto = ctx.message.photo.length
