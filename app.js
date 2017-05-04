@@ -61,7 +61,7 @@ app.on('message', (ctx) => {
                 file.on('finish', () => {
                     console.error('All writes are now complete.');
                     // Upload a local file to a new file to be created in your bucket.
-                    bucket.upload(ctx.message.from.id + '/' + fileName, function(err, file) {
+                    bucket.upload(fileName, function(err, file) {
                         if (!err) {
                             fs.unlink(fileName,()=>console.log('file deleted'))
                             users.child(ctx.message.from.id).push({
