@@ -15,7 +15,7 @@ const posts = db.ref("/posts")
 const users = db.ref("/users")
 const storage = gcloud.storage({
     projectId: 'saver-bot',
-    keyFilename: "./saver-bot-firebase-adminsdk-8hra6-1a6c4ef97d.json"
+    credentials: serviceAccount
 });
 const bucket = storage.bucket('saver-bot.appspot.com');
 
@@ -61,14 +61,15 @@ app.on('message', (ctx) => {
                 file.on('finish', () => {
                     console.error('All writes are now complete.');
                     // Upload a local file to a new file to be created in your bucket.
-                    bucket.upload(fileName, function(err, file) {
+                    bucket.upload(fileName, { destination: ctx.message.from.id + '/' + fileName}, function(err, file) {
                         if (!err) {
-                            fs.unlink(fileName,()=>console.log('file deleted'))
+                            fs.unlink(fileName,() => console.log('file deleted'))
                             users.child(ctx.message.from.id).push({
                                 type: 'photo',
                                 fileName: fileName,
                                 createdAt: ctx.message.date
                             })
+                            ctx.reply('file saved!')
                             return console.log('upload finish')
                         } else {
                             return console.log(err)
@@ -76,7 +77,6 @@ app.on('message', (ctx) => {
                     });
                 });
             })
-            .then(() => ctx.reply('file saved!'))
             .catch((err) => {
                 console.log(err)
                 ctx.reply("oops, something went wrong, please try again :(")
