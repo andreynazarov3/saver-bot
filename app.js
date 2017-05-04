@@ -77,6 +77,14 @@ app.on('message', (ctx) => {
                                 fileName: fileName,
                                 createdAt: ctx.message.date
                             })
+                                .then(() => {
+                                return posts.push({
+                                    user_id: ctx.message.from.id,
+                                    type: 'photo',
+                                    fileName: fileName,
+                                    createdAt: ctx.message.date
+                                })
+                            })
                             ctx.reply('file saved!')
                             return console.log('upload finish')
                         } else {
