@@ -5,14 +5,14 @@ const admin = require("firebase-admin")
 const serviceAccount = require("./saver-bot-firebase-adminsdk-8hra6-1a6c4ef97d.json")
 const fs = require("fs")
 const gcloud = require('google-cloud');
-const db = admin.database()
-const posts = db.ref("/posts")
-const users = db.ref("/users")
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://saver-bot.firebaseio.com"
 })
+const db = admin.database()
+const posts = db.ref("/posts")
+const users = db.ref("/users")
 const storage = gcloud.storage({
     projectId: 'saver-bot',
     keyFilename: serviceAccount
