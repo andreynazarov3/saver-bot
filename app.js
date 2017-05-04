@@ -56,25 +56,24 @@ app.on('message', (ctx) => {
                 let fileName = file_id + ".jpg";
                 let file = fs.createWriteStream(fileName);
                 let request = https.get(link, function (response) {
-                    response.pipe(file)
+                    return response.pipe(file)
                 })
+                    .then(() => {})
                 file.on('finish', () => {
                     console.error('All writes are now complete.');
                     // Upload a local file to a new file to be created in your bucket.
                     return bucket.upload(ctx.message.from.id + '/' + fileName, function(err, file) {
                         if (!err) {
                             fs.unlink(fileName,()=>console.log('file deleted'))
-                            console.log('upload finish');
+                            users.child(ctx.message.from.id).push({
+                                type: 'photo',
+                                fileName: fileName,
+                                createdAt: ctx.message.date
+                            })
+                            return console.log('upload finish');
                         }
                     });
                 });
-            })
-            .then((fileName)=> {
-                return users.child(ctx.message.from.id).push({
-                    type: 'photo',
-                    fileName: fileName,
-                    createdAt: ctx.message.date
-                })
             })
             .then(() => ctx.reply('file saved!'))
             .catch((err) => {
