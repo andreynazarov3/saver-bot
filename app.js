@@ -71,7 +71,7 @@ app.on('message', (ctx) => {
                             })
                             return console.log('upload finish')
                         } else {
-                            return console.log('upload error')
+                            return console.log(err)
                         }
                     });
                 });
