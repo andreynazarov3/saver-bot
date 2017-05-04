@@ -15,7 +15,7 @@ const posts = db.ref("/posts")
 const users = db.ref("/users")
 const storage = gcloud.storage({
     projectId: 'saver-bot',
-    keyFilename: serviceAccount
+    keyFilename: "./saver-bot-firebase-adminsdk-8hra6-1a6c4ef97d.json"
 });
 const bucket = storage.bucket('saver-bot.appspot.com');
 
