@@ -72,6 +72,7 @@ app.on('message', (ctx) => {
                             ctx.reply('file saved!')
                             return console.log('upload finish')
                         } else {
+                            ctx.reply("Ooops, error!")
                             return console.log(err)
                         }
                     });
