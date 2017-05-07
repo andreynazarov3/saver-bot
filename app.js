@@ -36,74 +36,92 @@ app.on('message', (ctx) => {
     if (ctx.updateSubType === "text") {
         ctx.reply('saving this text...')
             .then(() =>
-            // saving message to user id folder
+                // saving message to user id folder
                 users.child(ctx.message.from.id).push({
                     username: ctx.message.from.username,
                     type: 'text',
                     text: ctx.message.text,
-                    createdAt: ctx.message.date
+                    created_at: ctx.message.date
                 }))
             .then(() =>
                 posts.push({
-            // saving message to posts folder
+                    // saving message to posts folder
                     username: ctx.message.from.username,
                     user_id: ctx.message.from.id,
                     type: 'text',
                     text: ctx.message.text,
-                    createdAt: ctx.message.date
+                    created_at: ctx.message.date
                 }))
             .then(() => ctx.reply('saved!'))
-            .catch((err) => ctx.reply('ooops, something went wrong ;('));
+            .catch((err) => ctx.reply('Ooops, something went wrong ;('))
     }
     // bot action on photo/image event
     else if (ctx.updateSubType === "photo") {
+        // take biggest resolution of image from telegram
         let lastPhoto = ctx.message.photo.length
         let file_id = ctx.message.photo[lastPhoto - 1].file_id
+        let fileName = file_id + ".jpg"
+        let link // link placeholder
+
+        // get downloadable link
         app.telegram.getFileLink(file_id)
-            .then((link) => {
-                ctx.reply('saving photo...')
-                return link
-            })
-            .then((link) => {
-                let fileName = file_id + ".jpg"
+            .then((file_link) => link = file_link)
+            .then(() => ctx.reply('saving photo...'))
+            .then(() => new Promise((resolve, reject) => {
+                // create stream to write file on disk
                 let file = fs.createWriteStream(fileName)
+                // send request for file and save file by pipe
                 let request = https.get(link, function (response) {
                     response.pipe(file)
                 })
                 file.on('finish', () => {
-                    console.error('All writes are now complete.')
-                    // Upload a local file to a new file to be created in your bucket.
-                    bucket.upload(fileName, {destination: ctx.message.from.id + '/' + fileName}, function (err, file) {
-                        if (!err) {
-                            fs.unlink(fileName, () => console.log('file deleted'))
-                            users.child(ctx.message.from.id).push({
-                                type: 'photo',
-                                fileName: fileName,
-                                createdAt: ctx.message.date
-                            })
-                                .then(() => {
-                                    return posts.push({
-                                        user_id: ctx.message.from.id,
-                                        type: 'photo',
-                                        fileName: fileName,
-                                        createdAt: ctx.message.date
-                                    })
-                                })
-                            ctx.reply('file saved!')
-                            return console.log('upload finish')
+                    resolve(fileName)
+                })
+                file.on('error', (err) => {
+                    reject(err)
+                })
+            }))
+            // save file to firebase storage
+            .then(() => bucket.upload(
+                // file name
+                fileName,
+                // user folder on firebase storage
+                {destination: ctx.message.from.id + '/' + fileName}
+            ))
+            // delete file from disk
+            .then(() => new Promise((resolve, reject) =>
+                    fs.unlink(fileName, (err) => {
+                        if (err) {
+                            reject(err)
                         } else {
-                            ctx.reply("Ooops, error!")
-                            return console.log(err)
+                            resolve(console.log('file deleted success'))
                         }
                     })
+                )
+            )
+            // save file data to user folder
+            .then(() => users.child(ctx.message.from.id).push({
+                username: ctx.message.from.username,
+                type: 'photo',
+                fileName: fileName,
+                created_at: ctx.message.date
+            }))
+            // save file data to global folder
+            .then(() => posts.push({
+                    username: ctx.message.from.username,
+                    user_id: ctx.message.from.id,
+                    type: 'photo',
+                    fileName: fileName,
+                    created_at: ctx.message.date
                 })
-            })
+            )
+            .then(() => ctx.reply('file saved!'))
             .catch((err) => {
-                console.log(err)
-                ctx.reply("oops, something went wrong, please try again :(")
+                console.log(err);
+                ctx.reply("oops, something went wrong, please try again :(");
             })
     } else {
-        ctx.reply("sorry, i'm saving only text right now :(")
+        ctx.reply("sorry, i'm saving only text and images right now :(");
     }
 })
 
@@ -113,4 +131,4 @@ app.on('message', (ctx) => {
 //
 //===========================
 
-app.startWebhook("/webhook", null, process.env.PORT || 5000)
+app.startWebhook("/webhook", null, process.env.PORT || 5000);
