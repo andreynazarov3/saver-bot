@@ -1,23 +1,14 @@
-const Telegraf = require('telegraf')
-const https = require('https')
-const app = new Telegraf(process.env.BOT_TOKEN)
-const admin = require("firebase-admin")
-const serviceAccount = require("./saver-bot-firebase-adminsdk-8hra6-1a6c4ef97d.json")
-const fs = require("fs")
-const gcloud = require('google-cloud');
+// require standard libraries
+const https = require('https');
+const fs = require("fs");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://saver-bot.firebaseio.com"
-})
-const db = admin.database()
-const posts = db.ref("/posts")
-const users = db.ref("/users")
-const storage = gcloud.storage({
-    projectId: 'saver-bot',
-    credentials: serviceAccount
-});
-const bucket = storage.bucket('saver-bot.appspot.com');
+// telegraf framework initialize
+const Telegraf = require('telegraf')
+const app = new Telegraf(process.env.BOT_TOKEN)
+
+// import database and storage
+const { bucket } = require('./storage.js')
+const { users, posts } = require('./firebase.js')
 
 
 // Set telegram webhook
