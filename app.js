@@ -32,17 +32,21 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
 //===========================
 
 app.on('message', (ctx) => {
+    // bot action on plain text event
     if (ctx.updateSubType === "text") {
         ctx.reply('saving this text...')
             .then(() =>
+            // saving message to user id folder
                 users.child(ctx.message.from.id).push({
-                    username: ctx.message.from.username
+                    username: ctx.message.from.username,
                     type: 'text',
                     text: ctx.message.text,
                     createdAt: ctx.message.date
                 }))
             .then(() =>
                 posts.push({
+            // saving message to posts folder
+                    username: ctx.message.from.username,
                     user_id: ctx.message.from.id,
                     type: 'text',
                     text: ctx.message.text,
@@ -51,6 +55,7 @@ app.on('message', (ctx) => {
             .then(() => ctx.reply('saved!'))
             .catch((err) => ctx.reply('ooops, something went wrong ;('));
     }
+    // bot action on photo/image event
     else if (ctx.updateSubType === "photo") {
         let lastPhoto = ctx.message.photo.length
         let file_id = ctx.message.photo[lastPhoto - 1].file_id
