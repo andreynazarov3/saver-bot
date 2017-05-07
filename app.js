@@ -1,3 +1,9 @@
+//===========================
+//
+// APP CONFIG
+//
+//===========================
+
 // require standard libraries
 const https = require('https');
 const fs = require("fs");
@@ -10,8 +16,7 @@ const app = new Telegraf(process.env.BOT_TOKEN)
 const { bucket } = require('./storage.js')
 const { users, posts } = require('./firebase.js')
 
-
-// Set telegram webhook
+// set telegram webhook
 app.telegram.setWebhook(process.env.WEBHOOK_URL)
     .then(function (result) {
         console.log('set webhook success: ' + result)
@@ -19,6 +24,12 @@ app.telegram.setWebhook(process.env.WEBHOOK_URL)
     .catch(function (err) {
         console.log('set webhook error: ' + err)
     })
+
+//===========================
+//
+// BOT LOGIC
+//
+//===========================
 
 app.on('message', (ctx) => {
     if (ctx.updateSubType === "text") {
@@ -93,4 +104,11 @@ app.on('message', (ctx) => {
         ctx.reply("sorry, i'm saving only text right now :(")
     }
 })
+
+//===========================
+//
+// BOT START!
+//
+//===========================
+
 app.startWebhook("/webhook", null, process.env.PORT || 5000)
